@@ -5,7 +5,7 @@ from pygame import mixer
 import pygame.midi
 
 def playGame():
-    settingsFile = open("settings.txt")
+    settingsFile = open("resources/settings.txt")
     settings = settingsFile.readlines()
     settingsFile.close()
 
