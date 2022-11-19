@@ -81,13 +81,18 @@ def playGame():
     class Note():
         pass
 
+    keyboardConnected = True
     heldNotes = []
     notes = load("music")
     notes = drawNote(notes, windowSurface)
 
     timer: int = 0
-    midiInp = pygame.midi.Input(pygame.midi.get_default_input_id())
-    midiOut = pygame.midi.Output(pygame.midi.get_default_output_id())
+    try:
+        midiInp = pygame.midi.Input(pygame.midi.get_default_input_id())
+        midiOut = pygame.midi.Output(pygame.midi.get_default_output_id())
+    except:
+        keyboardConnected = False
+    
     while True:
         windowSurface.fill(WHITE)
         backButton: Rect = pygame.Rect(8*windowWidth/9-15, 15, windowWidth/9, windowHeight/9)
@@ -114,7 +119,7 @@ def playGame():
                     midiOut.note_on(event.data1,event.data2)
                     heldNotes.append((event.data1,event.data2))
         
-        if midiInp.poll():
+        if keyboardConnected and midiInp.poll():
             midi_events = midiInp.read(10)
             # convert them into pygame events.
             midi_evs = pygame.midi.midis2events(midi_events, midiInp.device_id)
