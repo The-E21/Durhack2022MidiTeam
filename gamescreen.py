@@ -1,9 +1,11 @@
 import pygame
 import sys
 from pygame import Rect
+from pygame import mixer
 
 def playGame():
     pygame.init()
+    mixer.init()
 
     WHITE: tuple = (255,255,255)
     LIGHT_GREY: tuple = (211, 211, 211)
@@ -32,7 +34,7 @@ def playGame():
             self.width = width
             self.height = height
             self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-
+            
     keys = [
         Key(5, 22*windowHeight/95, pygame.K_s),
         Key(5, 25*windowHeight/95, pygame.K_d),
@@ -68,11 +70,19 @@ def playGame():
         Key(5, 29.5*windowHeight/95, pygame.K_e, BLACK, 45, 20),
         Key(5, 23.5*windowHeight/95, pygame.K_e, BLACK, 45, 20),]
 
+    class Note():
+        pass
+
+    notes = load("music")
+    notes = drawNote(notes, windowSurface)
+
     timer: int = 0
     while True:
         windowSurface.fill(WHITE)
-
         backButton: Rect = pygame.Rect(8*windowWidth/9-15, 15, windowWidth/9, windowHeight/9)
+
+        #if timer == notes[0][0]:
+        #    pass
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -82,7 +92,8 @@ def playGame():
                     terminate()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if backButton.collidepoint(pygame.mouse.get_pos()):
-                    terminate()
+                    from gui import mainMenu
+                    mainMenu()
         
         k = pygame.key.get_pressed()
         for key in keys:
@@ -95,9 +106,11 @@ def playGame():
         pygame.draw.rect(windowSurface, LIGHT_RED, backButton)
         pygame.draw.rect(windowSurface, DARK_RED, backButton, 10)
 
-        drawText("Exit", windowSurface, 8*windowWidth/9+15, 40,
+        drawText("Back", windowSurface, 8*windowWidth/9+15, 40,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
         
+        mainClock.tick(50)
+        timer += 1
         pygame.display.update()
 
 def terminate():
@@ -109,3 +122,9 @@ def drawText(text, surface, x, y, font, color=(255, 0, 0)):
     textRect = textObject.get_rect()
     textRect.topleft = (x, y)
     surface.blit(textObject, textRect)
+
+def load(map):
+    pass
+
+def drawNote(notes, surface):
+    pass
