@@ -1,8 +1,6 @@
 import pygame
 from pygame import Rect
 import sys
-from gamescreen import playGame
-from settingscreen import showSettings
 
 pygame.init()
 
@@ -45,8 +43,10 @@ def mainMenu():
                 if quit_button.collidepoint(pygame.mouse.get_pos()):
                     terminate()
                 if play_button.collidepoint(pygame.mouse.get_pos()):
+                    from gamescreen import playGame
                     playGame()
                 if settings_button.collidepoint(pygame.mouse.get_pos()):
+                    from settingscreen import showSettings
                     showSettings()
 
         pygame.draw.rect(windowSurface, LIGHT_RED, quit_button)
