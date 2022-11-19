@@ -93,6 +93,7 @@ def playGame():
         mixer.music.load("resources/AugmentedSongHard.wav")
     
     musicVolume = (int(settings[0]) * int(settings[1])) / 10000
+    pianoVolume = (int(settings[0]) * int(settings[2])) / 10000
     mixer.music.set_volume(musicVolume)
     print(musicVolume)
     mixer.music.play()
@@ -133,8 +134,8 @@ def playGame():
                 if note != None:
                     midiOut.note_off(note[0],note[1])
                 else:
-                    midiOut.note_on(event.data1,event.data2)
-                    heldNotes.append((event.data1,event.data2))
+                    midiOut.note_on(event.data1,int(event.data2 * pianoVolume))
+                    heldNotes.append((event.data1,int(event.data2 * pianoVolume)))
         
         if keyboardConnected and midiInp.poll():
             midi_events = midiInp.read(10)
