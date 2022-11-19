@@ -4,14 +4,14 @@ import sys
 
 pygame.init()
 
-BLACK: tuple[int, int, int] = (0, 0, 0)
-WHITE: tuple[int, int, int] = (255, 255, 255)
-RED: tuple[int, int, int] = (255, 0, 0)
-LIGHT_RED: tuple[int, int, int] = (255, 204, 203)
-DARK_RED: tuple[int, int, int] = (220,20,50)
-BLUE: tuple[int, int, int] = (0, 0, 255)
-GREY: tuple[int, int, int] = (194, 196, 194)
-DARK_GREY: tuple[int, int, int] = (90, 91, 90)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+LIGHT_RED = (255, 204, 203)
+DARK_RED = (220,20,50)
+BLUE = (0, 0, 255)
+GREY = (194, 196, 194)
+DARK_GREY = (90, 91, 90)
 
 monitorInfoObject = pygame.display.Info()
 windowWidth: int = monitorInfoObject.current_w
