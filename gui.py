@@ -57,6 +57,7 @@ def mainMenu():
 
         pygame.draw.rect(windowSurface, LIGHT_RED, settings_button)
         pygame.draw.rect(windowSurface, DARK_RED, settings_button, 10)
+        
 
         drawText("Exit", windowSurface, 40, 8*windowHeight/9 + 5,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
