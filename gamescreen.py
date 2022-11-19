@@ -41,51 +41,46 @@ def playGame():
             self.height = height
             self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
             self.noteVal = noteVal
+            self.handled = False
             
     keys = [
         Key(5, 22*windowHeight/95, pygame.K_s, 79),
-        Key(5, 23.5*windowHeight/95, pygame.K_e,78, BLACK, 45, 20),
         Key(5, 25*windowHeight/95, pygame.K_d, 77),
         Key(5, 28*windowHeight/95, pygame.K_f,76),
-        Key(5, 29.5*windowHeight/95, pygame.K_e,75, BLACK, 45, 20),
         Key(5, 31*windowHeight/95, pygame.K_g,74),
-        Key(5, 32.5*windowHeight/95, pygame.K_e,73, BLACK, 45, 20),
         Key(5, 34*windowHeight/95, pygame.K_h,72),
         Key(5, 37*windowHeight/95, pygame.K_j,71),
-        Key(5, 38.5*windowHeight/95, pygame.K_e,70,BLACK, 45, 20),
         Key(5, 40*windowHeight/95, pygame.K_k,69),
-        Key(5, 41.5*windowHeight/95, pygame.K_e,68, BLACK, 45, 20),
         Key(5, 43*windowHeight/95, pygame.K_l,67),
-        Key(5, 44.5*windowHeight/95, pygame.K_e,66, BLACK, 45, 20),
         Key(5, 46*windowHeight/95, pygame.K_SEMICOLON,65),
         Key(5, 49*windowHeight/95, pygame.K_QUOTE,64),
-        Key(5, 50.5*windowHeight/95, pygame.K_e,63, BLACK, 45, 20),
         Key(5, 52*windowHeight/95, pygame.K_KP_ENTER,62),
-        Key(5, 53.5*windowHeight/95, pygame.K_e,61, BLACK, 45, 20),
         Key(5, 55*windowHeight/95, pygame.K_1,60),
         Key(5, 58*windowHeight/95, pygame.K_1,59),
-        Key(5, 59.5*windowHeight/95, pygame.K_e,58, BLACK, 45, 20),
         Key(5, 61*windowHeight/95, pygame.K_1,57),
-        Key(5, 62.5*windowHeight/95, pygame.K_e,56, BLACK, 45, 20),
         Key(5, 64*windowHeight/95, pygame.K_1,55),
-        Key(5, 65.5*windowHeight/95, pygame.K_e, 54,BLACK, 45, 20),
         Key(5, 67*windowHeight/95, pygame.K_1,53),
         Key(5, 70*windowHeight/95, pygame.K_1,52),
-        Key(5, 71.5*windowHeight/95, pygame.K_e,51, BLACK, 45, 20),
         Key(5, 73*windowHeight/95, pygame.K_1,50),
-        Key(5, 74.5*windowHeight/95, pygame.K_w,49, BLACK, 45, 20),
         Key(5, 76*windowHeight/95, pygame.K_1,48),
-        
+        Key(5, 44.5*windowHeight/95, pygame.K_e,66, BLACK, 45, 20),
+        Key(5, 32.5*windowHeight/95, pygame.K_e,73, BLACK, 45, 20),
+        Key(5, 38.5*windowHeight/95, pygame.K_e,70,BLACK, 45, 20),
+        Key(5, 29.5*windowHeight/95, pygame.K_e,75, BLACK, 45, 20),
+        Key(5, 41.5*windowHeight/95, pygame.K_e,68, BLACK, 45, 20),
+        Key(5, 50.5*windowHeight/95, pygame.K_e,63, BLACK, 45, 20),
+        Key(5, 53.5*windowHeight/95, pygame.K_e,61, BLACK, 45, 20),
+        Key(5, 59.5*windowHeight/95, pygame.K_e,58, BLACK, 45, 20),
+        Key(5, 23.5*windowHeight/95, pygame.K_e,78, BLACK, 45, 20),
+        Key(5, 74.5*windowHeight/95, pygame.K_w,49, BLACK, 45, 20),
+        Key(5, 71.5*windowHeight/95, pygame.K_e,51, BLACK, 45, 20),
+        Key(5, 65.5*windowHeight/95, pygame.K_e, 54,BLACK, 45, 20),
+        Key(5, 62.5*windowHeight/95, pygame.K_e,56, BLACK, 45, 20),
         ]
-
-    class Note():
-        pass
 
     keyboardConnected = True
     heldNotes = []
-    notes = load("music")
-    notes = drawNote(notes, windowSurface)
-
+    
     timer: int = 0
     try:
         midiInp = pygame.midi.Input(pygame.midi.get_default_input_id())
@@ -93,6 +88,8 @@ def playGame():
     except:
         keyboardConnected = False
     
+    map_rect = loadmap("map", windowHeight)
+
     while True:
         windowSurface.fill(WHITE)
         backButton: Rect = pygame.Rect(8*windowWidth/9-15, 15, windowWidth/9, windowHeight/9)
@@ -135,9 +132,20 @@ def playGame():
         for key in keys:
             if key.noteVal in heldKeys:
                 pygame.draw.rect(windowSurface, key.colour2, key.rect)
+                key.handled = False
             else:
                 pygame.draw.rect(windowSurface, key.colour1, key.rect)
+                key.handled = True
             pygame.draw.rect(windowSurface, BLACK, key.rect, 1)
+
+        for rect in map_rect:
+            pygame.draw.rect(windowSurface,(200,0,0), rect)
+            rect.x -= 3
+            for key in keys:
+                if key.rect.colliderect(rect) and not key.handled:
+                    map_rect.remove(rect)
+                    key.handled = True
+                    
 
         pygame.draw.rect(windowSurface, LIGHT_RED, backButton)
         pygame.draw.rect(windowSurface, DARK_RED, backButton, 10)
@@ -159,11 +167,23 @@ def drawText(text, surface, x, y, font, color=(255, 0, 0)):
     textRect.topleft = (x, y)
     surface.blit(textObject, textRect)
 
-def load(map):
-    pass
-
-def drawNote(notes, surface):
-    pass
+def loadmap(map, windowHeight):
+    rects = []
+    from note_seperator import noteSeperator
+    allNotes = noteSeperator(map)
+    print(allNotes)
+    for noteList in allNotes:
+        if len(noteList) != 0:
+            for note in noteList:
+                print(note)
+                if allNotes.index(noteList) == 0:
+                    y = 500
+                elif allNotes.index(noteList) == 1:
+                    y = 300
+                else:
+                    y = 100
+                rects.append(pygame.Rect(int(note[0])+500, y,(int(note[1])-int(note[0])), 20))
+    return rects
 
 def removeNote(notes, noteVal):
     rtn = None
@@ -176,3 +196,5 @@ def removeNote(notes, noteVal):
         return rtn
     else:
         return None
+
+playGame()

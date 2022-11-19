@@ -1,5 +1,5 @@
 def noteSeperator(filename):
-    f = open(filename, 'r')
+    f = open(filename + ".txt", 'r')
     notes = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
     lines = f.readlines()
     for line in lines:
