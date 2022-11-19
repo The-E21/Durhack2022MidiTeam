@@ -1,6 +1,7 @@
 import pygame
 from pygame import Rect
 import sys
+from gamescreen import playGame
 
 pygame.init()
 
@@ -29,7 +30,8 @@ def mainMenu():
     while True:
         windowSurface.fill(WHITE)
 
-        quit_button: Rect = pygame.Rect(15, windowHeight - (windowHeight/9+15), windowWidth/6, windowHeight/9)
+        quit_button: Rect = pygame.Rect(15, 8*windowHeight/9-15, windowWidth/9, windowHeight/9)
+        play_button: Rect = pygame.Rect(15, 3*windowHeight/9-15, windowWidth/6, windowHeight/9)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -40,10 +42,17 @@ def mainMenu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if quit_button.collidepoint(pygame.mouse.get_pos()):
                     terminate()
+                if play_button.collidepoint(pygame.mouse.get_pos()):
+                    playGame()
 
         pygame.draw.rect(windowSurface, LIGHT_RED, quit_button)
         pygame.draw.rect(windowSurface, DARK_RED, quit_button, 10)
-        drawText("Quit", windowSurface, windowWidth/20, 8*windowHeight/9 + 5,
+        
+        pygame.draw.rect(windowSurface, LIGHT_RED, play_button)
+        pygame.draw.rect(windowSurface, DARK_RED, play_button, 10)
+        drawText("Exit", windowSurface, 50, 8*windowHeight/9 + 5,
+                 pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
+        drawText("Play it", windowSurface, 50, 3*windowHeight/9 + 5,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
 
         pygame.display.update()
