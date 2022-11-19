@@ -4,6 +4,7 @@ from pygame import Rect
 import pygame_widgets
 from pygame_widgets.slider import Slider
 from pygame_widgets.textbox import TextBox
+from pygame_widgets.dropdown import Dropdown
 
 
 def showSettings():
@@ -42,21 +43,25 @@ def showSettings():
     outputPiano = TextBox(windowSurface, sliderPiano.getX()+sliderPiano.getWidth()+80, sliderPiano.getY(), 50, 50, fontSize=30)
     outputPiano.disable()
 
-    f=open("settings.txt")
-    volumes=f.readlines()
+    f=open("resources/settings.txt")
+    values=f.readlines()
     f.close()
-    for i in volumes:
+    for i in values:
         i=i.strip()
-    sliderMaster.setValue(int(volumes[0]))
-    sliderMusic.setValue(int(volumes[1]))
-    sliderPiano.setValue(int(volumes[2]))
+    sliderMaster.setValue(int(values[0]))
+    sliderMusic.setValue(int(values[1]))
+    sliderPiano.setValue(int(values[2]))
+    selected=values[3]
 
 
     while True:
         windowSurface.fill((255,255,255))
 
-
         return_button: Rect = pygame.Rect(15, 8*windowHeight/9-15, windowWidth/9, windowHeight/9)
+
+        easy_button: Rect = pygame.Rect(100, 250, windowWidth/9, windowHeight/9)
+        normal_button: Rect = pygame.Rect(100, 350, windowWidth/9, windowHeight/9)
+        hard_button: Rect = pygame.Rect(100, 450, windowWidth/9, windowHeight/9)
 
 
         outputMaster.setText(sliderMaster.getValue())
@@ -70,6 +75,15 @@ def showSettings():
                 if return_button.collidepoint(pygame.mouse.get_pos()):
                     from gui import mainMenu
                     mainMenu()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if easy_button.collidepoint(pygame.mouse.get_pos()):
+                    selected="easy"
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if normal_button.collidepoint(pygame.mouse.get_pos()):
+                    selected="normal"
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if hard_button.collidepoint(pygame.mouse.get_pos()):
+                    selected="hard"
             if event.type == pygame.QUIT:
                 terminate()
             if event.type == pygame.KEYDOWN:
@@ -77,18 +91,33 @@ def showSettings():
                     terminate()
 
         pygame.draw.rect(windowSurface, (255, 204, 203), return_button)
+        pygame.draw.rect(windowSurface, (255, 204, 203), easy_button)
+        pygame.draw.rect(windowSurface, (255, 204, 203), normal_button)
+        pygame.draw.rect(windowSurface, (255, 204, 203), hard_button)
+
+        if(selected=="easy"):
+            pygame.draw.rect(windowSurface, (220,20,50), easy_button)
+        elif (selected=="normal"):
+            pygame.draw.rect(windowSurface, (220,20,50), normal_button)
+        else:
+            pygame.draw.rect(windowSurface, (220,20,50), hard_button)
 
         drawText("Settings",windowSurface,0,0, titleFont)
         drawText("Volume",windowSurface,5,50, subheadingFont)
         drawText("Master:",windowSurface,5,100, subheadingFont)
         drawText("Music:",windowSurface,5,150, subheadingFont)
         drawText("Piano:",windowSurface,5,200, subheadingFont)
+        drawText("Difficulty", windowSurface, 5,250, subheadingFont)
+        drawText("Easy",windowSurface,easy_button.center[0], easy_button.center[1], subheadingFont)
+        drawText("Normal",windowSurface,normal_button.center[0], normal_button.center[1], subheadingFont)
+        drawText("Hard",windowSurface,hard_button.center[0], hard_button.center[1], subheadingFont)
         drawText("Return",windowSurface,return_button.center[0], return_button.center[1], subheadingFont)
 
-        f=open("settings.txt","w")
+        f=open("resources/settings.txt","w")
         f.write(outputMaster.getText()+'\n')
         f.write(outputMusic.getText()+'\n')
         f.write(outputPiano.getText()+'\n')
+        f.write(selected+'\n')
         f.close()
 
         pygame_widgets.update(events)

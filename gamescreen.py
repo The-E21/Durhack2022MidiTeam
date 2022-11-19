@@ -5,6 +5,10 @@ from pygame import mixer
 import pygame.midi
 
 def playGame():
+    settingsFile = open("resources/settings.txt")
+    settings = settingsFile.readlines()
+    settingsFile.close()
+
     pygame.init()
     pygame.fastevent.init()
     event_get = pygame.fastevent.get
@@ -78,6 +82,20 @@ def playGame():
         Key(5, 62.5*windowHeight/95, pygame.K_e,56, BLACK, 45, 20),
         ]
 
+
+    if settings[3] == "easy":
+        mixer.music.load("resources/AugmentedMusicEasy.wav")
+    elif settings[3] == "normal":
+        mixer.music.load("resources/AugmentedMusic.wav")
+    else:
+        mixer.music.load("resources/AugmentedSongHard.wav")
+    
+    musicVolume = (int(settings[0]) * int(settings[1])) / 10000
+    pianoVolume = (int(settings[0]) * int(settings[2])) / 10000
+    mixer.music.set_volume(musicVolume)
+    print(musicVolume)
+    mixer.music.play()
+
     keyboardConnected = True
     heldNotes = []
     
@@ -105,6 +123,7 @@ def playGame():
                     terminate()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if backButton.collidepoint(pygame.mouse.get_pos()):
+                    mixer.music.stop()
                     from gui import mainMenu
                     mainMenu()
             if event.type in [pygame.midi.MIDIIN]:
@@ -113,8 +132,8 @@ def playGame():
                 if note != None:
                     midiOut.note_off(note[0],note[1])
                 else:
-                    midiOut.note_on(event.data1,event.data2)
-                    heldNotes.append((event.data1,event.data2))
+                    midiOut.note_on(event.data1,int(event.data2 * pianoVolume))
+                    heldNotes.append((event.data1,int(event.data2 * pianoVolume)))
         
         if keyboardConnected and midiInp.poll():
             midi_events = midiInp.read(10)
