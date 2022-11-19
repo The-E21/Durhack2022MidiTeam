@@ -43,7 +43,7 @@ def showSettings():
     outputPiano = TextBox(windowSurface, sliderPiano.getX()+sliderPiano.getWidth()+80, sliderPiano.getY(), 50, 50, fontSize=30)
     outputPiano.disable()
 
-    f=open("settings.txt")
+    f=open("resources/settings.txt")
     values=f.readlines()
     f.close()
     for i in values:
@@ -113,7 +113,7 @@ def showSettings():
         drawText("Hard",windowSurface,hard_button.center[0], hard_button.center[1], subheadingFont)
         drawText("Return",windowSurface,return_button.center[0], return_button.center[1], subheadingFont)
 
-        f=open("settings.txt","w")
+        f=open("resources/settings.txt","w")
         f.write(outputMaster.getText()+'\n')
         f.write(outputMusic.getText()+'\n')
         f.write(outputPiano.getText()+'\n')
