@@ -43,38 +43,38 @@ def playGame():
             self.noteVal = noteVal
             
     keys = [
-        Key(5, 22*windowHeight/95, pygame.K_s, 78),
-        Key(5, 23.5*windowHeight/95, pygame.K_e,77, BLACK, 45, 20),
-        Key(5, 25*windowHeight/95, pygame.K_d, 76),
-        Key(5, 28*windowHeight/95, pygame.K_f,75),
-        Key(5, 29.5*windowHeight/95, pygame.K_e,74, BLACK, 45, 20),
-        Key(5, 31*windowHeight/95, pygame.K_g,73),
-        Key(5, 32.5*windowHeight/95, pygame.K_e,72, BLACK, 45, 20),
-        Key(5, 34*windowHeight/95, pygame.K_h,71),
-        Key(5, 37*windowHeight/95, pygame.K_j,70),
-        Key(5, 38.5*windowHeight/95, pygame.K_e,69,BLACK, 45, 20),
-        Key(5, 40*windowHeight/95, pygame.K_k,68),
-        Key(5, 41.5*windowHeight/95, pygame.K_e,67, BLACK, 45, 20),
-        Key(5, 43*windowHeight/95, pygame.K_l,66),
-        Key(5, 44.5*windowHeight/95, pygame.K_e,65, BLACK, 45, 20),
-        Key(5, 46*windowHeight/95, pygame.K_SEMICOLON,64),
-        Key(5, 49*windowHeight/95, pygame.K_QUOTE,63),
-        Key(5, 50.5*windowHeight/95, pygame.K_e,62, BLACK, 45, 20),
-        Key(5, 52*windowHeight/95, pygame.K_KP_ENTER,61),
-        Key(5, 53.5*windowHeight/95, pygame.K_e,60, BLACK, 45, 20),
-        Key(5, 55*windowHeight/95, pygame.K_1,59),
-        Key(5, 58*windowHeight/95, pygame.K_1,58),
-        Key(5, 59.5*windowHeight/95, pygame.K_e,57, BLACK, 45, 20),
-        Key(5, 61*windowHeight/95, pygame.K_1,56),
-        Key(5, 62.5*windowHeight/95, pygame.K_e,55, BLACK, 45, 20),
-        Key(5, 64*windowHeight/95, pygame.K_1,54),
-        Key(5, 65.5*windowHeight/95, pygame.K_e, 53,BLACK, 45, 20),
-        Key(5, 67*windowHeight/95, pygame.K_1,52),
-        Key(5, 70*windowHeight/95, pygame.K_1,51),
-        Key(5, 71.5*windowHeight/95, pygame.K_e,50, BLACK, 45, 20),
-        Key(5, 73*windowHeight/95, pygame.K_1,49),
-        Key(5, 74.5*windowHeight/95, pygame.K_w,48, BLACK, 45, 20),
-        Key(5, 76*windowHeight/95, pygame.K_1,47),
+        Key(5, 22*windowHeight/95, pygame.K_s, 79),
+        Key(5, 23.5*windowHeight/95, pygame.K_e,78, BLACK, 45, 20),
+        Key(5, 25*windowHeight/95, pygame.K_d, 77),
+        Key(5, 28*windowHeight/95, pygame.K_f,76),
+        Key(5, 29.5*windowHeight/95, pygame.K_e,75, BLACK, 45, 20),
+        Key(5, 31*windowHeight/95, pygame.K_g,74),
+        Key(5, 32.5*windowHeight/95, pygame.K_e,73, BLACK, 45, 20),
+        Key(5, 34*windowHeight/95, pygame.K_h,72),
+        Key(5, 37*windowHeight/95, pygame.K_j,71),
+        Key(5, 38.5*windowHeight/95, pygame.K_e,70,BLACK, 45, 20),
+        Key(5, 40*windowHeight/95, pygame.K_k,69),
+        Key(5, 41.5*windowHeight/95, pygame.K_e,68, BLACK, 45, 20),
+        Key(5, 43*windowHeight/95, pygame.K_l,67),
+        Key(5, 44.5*windowHeight/95, pygame.K_e,66, BLACK, 45, 20),
+        Key(5, 46*windowHeight/95, pygame.K_SEMICOLON,65),
+        Key(5, 49*windowHeight/95, pygame.K_QUOTE,64),
+        Key(5, 50.5*windowHeight/95, pygame.K_e,63, BLACK, 45, 20),
+        Key(5, 52*windowHeight/95, pygame.K_KP_ENTER,62),
+        Key(5, 53.5*windowHeight/95, pygame.K_e,61, BLACK, 45, 20),
+        Key(5, 55*windowHeight/95, pygame.K_1,60),
+        Key(5, 58*windowHeight/95, pygame.K_1,59),
+        Key(5, 59.5*windowHeight/95, pygame.K_e,58, BLACK, 45, 20),
+        Key(5, 61*windowHeight/95, pygame.K_1,57),
+        Key(5, 62.5*windowHeight/95, pygame.K_e,56, BLACK, 45, 20),
+        Key(5, 64*windowHeight/95, pygame.K_1,55),
+        Key(5, 65.5*windowHeight/95, pygame.K_e, 54,BLACK, 45, 20),
+        Key(5, 67*windowHeight/95, pygame.K_1,53),
+        Key(5, 70*windowHeight/95, pygame.K_1,52),
+        Key(5, 71.5*windowHeight/95, pygame.K_e,51, BLACK, 45, 20),
+        Key(5, 73*windowHeight/95, pygame.K_1,50),
+        Key(5, 74.5*windowHeight/95, pygame.K_w,49, BLACK, 45, 20),
+        Key(5, 76*windowHeight/95, pygame.K_1,48),
         
         ]
 
@@ -123,8 +123,12 @@ def playGame():
                 event_post(m_e)
         
         k = pygame.key.get_pressed()
+        heldKeys = []
+        for note in heldNotes:
+            heldKeys.append(note[0])
+
         for key in keys:
-            if k[key.key]:
+            if key.noteVal in heldKeys:
                 pygame.draw.rect(windowSurface, key.colour2, key.rect)
             else:
                 pygame.draw.rect(windowSurface, key.colour1, key.rect)
