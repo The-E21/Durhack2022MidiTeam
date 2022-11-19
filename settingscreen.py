@@ -27,6 +27,9 @@ def showSettings():
     # pygame.display.set_icon(pygame.image.load('resources/logo.png'))
 
     timer: int = 0
+
+
+
     sliderMaster = Slider(windowSurface, 100, 100, int(windowWidth/4), int(windowHeight/20), min=0, max=100, step=1)
     outputMaster = TextBox(windowSurface, sliderMaster.getX()+sliderMaster.getWidth()+80, sliderMaster.getY(), 50, 50, fontSize=30)
     outputMaster.disable()
@@ -38,6 +41,17 @@ def showSettings():
     sliderPiano = Slider(windowSurface, 100, 200, int(windowWidth/4), int(windowHeight/20), min=0, max=100, step=1)
     outputPiano = TextBox(windowSurface, sliderPiano.getX()+sliderPiano.getWidth()+80, sliderPiano.getY(), 50, 50, fontSize=30)
     outputPiano.disable()
+
+    f=open("settings.txt")
+    volumes=f.readlines()
+    f.close()
+    for i in volumes:
+        i=i.strip()
+    sliderMaster.setValue(int(volumes[0]))
+    sliderMusic.setValue(int(volumes[1]))
+    sliderPiano.setValue(int(volumes[2]))
+
+
     while True:
         windowSurface.fill((255,255,255))
 
@@ -72,9 +86,9 @@ def showSettings():
         drawText("Return",windowSurface,return_button.center[0], return_button.center[1], subheadingFont)
 
         f=open("settings.txt","w")
-        f.write(outputMaster.getText()+"\n")
-        f.write(outputMusic.getText()+"\n")
-        f.write(outputPiano.getText()+"\n")
+        f.write(outputMaster.getText()+'\n')
+        f.write(outputMusic.getText()+'\n')
+        f.write(outputPiano.getText()+'\n')
         f.close()
 
         pygame_widgets.update(events)
