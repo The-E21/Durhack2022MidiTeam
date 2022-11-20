@@ -24,6 +24,7 @@ def playGame():
     WHITE: tuple = (255,255,255)
     LIGHT_GREY: tuple = (211, 211, 211)
     RED: tuple[int, int, int] = (255, 0, 0)
+    BLUE: tuple[int,int,int] = (0,0,255)
     LIGHT_RED: tuple[int, int, int] = (255, 204, 203)
     DARK_RED: tuple[int, int, int] = (220,20,50)
     BLACK: tuple = (0,0,0)
@@ -39,7 +40,7 @@ def playGame():
     # pygame.display.set_icon(pygame.image.load('resources/logo.png'))
 
     class Key():
-        def __init__(self, x, y, key, noteVal, colour1=LIGHT_GREY, width=100, height=30, colour2=RED):
+        def __init__(self, x, y, key, noteVal, colour1=LIGHT_GREY, width=100, height=30, colour2=BLUE):
             self.x = x
             self.y = y
             self.colour1 = colour1
