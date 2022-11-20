@@ -5,6 +5,8 @@ from pygame import mixer
 import pygame.midi
 
 def playGame():
+    fps = 60
+    multiplier = 100
     settingsFile = open("resources/settings.txt")
     settings = settingsFile.readlines()
     settingsFile.close()
@@ -85,10 +87,13 @@ def playGame():
 
     if settings[3] == "easy":
         mixer.music.load("resources/AugmentedMusicEasy.wav")
+        bps = 11/9
     elif settings[3] == "normal":
         mixer.music.load("resources/AugmentedMusic.wav")
+        bps = 11/6
     else:
         mixer.music.load("resources/AugmentedSongHard.wav")
+        bps = 11/4
     
     musicVolume = (int(settings[0]) * int(settings[1])) / 10000
     pianoVolume = (int(settings[0]) * int(settings[2])) / 10000
@@ -106,7 +111,7 @@ def playGame():
     except:
         keyboardConnected = False
     
-    map_rect = loadmap("map", windowHeight)
+    map_rect = loadmap("map", windowWidth, keys, multiplier)
 
     while True:
         windowSurface.fill(WHITE)
@@ -159,7 +164,7 @@ def playGame():
 
         for rect in map_rect:
             pygame.draw.rect(windowSurface,(200,0,0), rect)
-            rect.x -= 3
+            rect.x -= multiplier*bps/fps
             for key in keys:
                 if key.rect.colliderect(rect) and not key.handled:
                     map_rect.remove(rect)
@@ -172,7 +177,7 @@ def playGame():
         drawText("Back", windowSurface, 8*windowWidth/9+15, 40,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
         
-        mainClock.tick(50)
+        mainClock.tick(fps)
         timer += 1
         pygame.display.update()
 
@@ -186,7 +191,7 @@ def drawText(text, surface, x, y, font, color=(255, 0, 0)):
     textRect.topleft = (x, y)
     surface.blit(textObject, textRect)
 
-def loadmap(map, windowHeight):
+def loadmap(map, windowWidth, keys, m):
     rects = []
     from note_seperator import noteSeperator
     allNotes = noteSeperator(map)
@@ -195,13 +200,11 @@ def loadmap(map, windowHeight):
         if len(noteList) != 0:
             for note in noteList:
                 print(note)
-                if allNotes.index(noteList) == 0:
-                    y = 500
-                elif allNotes.index(noteList) == 1:
-                    y = 300
-                else:
-                    y = 100
-                rects.append(pygame.Rect(int(note[0])+500, y,(int(note[1])-int(note[0])), 20))
+                for key in keys:
+                    if (key.noteVal % 48) == allNotes.index(noteList):
+                        y = key.y
+                        height = key.height
+                        rects.append(pygame.Rect((windowWidth+ m*float(note[0])), y, m*(float(note[1])-float(note[0])), height))
     return rects
 
 def removeNote(notes, noteVal):
