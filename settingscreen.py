@@ -7,6 +7,15 @@ from pygame_widgets.textbox import TextBox
 from pygame_widgets.dropdown import Dropdown
 
 
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+LIGHT_RED = (255, 204, 203)
+DARK_RED = (220,20,50)
+BLUE = (0, 0, 255)
+GREY = (194, 196, 194)
+DARK_GREY = (90, 91, 90)
+
 def showSettings():
     pygame.init()
 
@@ -31,23 +40,23 @@ def showSettings():
 
 
 
-    sliderMaster = Slider(windowSurface, 100, 100, int(windowWidth/4), int(windowHeight/20), min=0, max=100, step=1)
+    sliderMaster = Slider(windowSurface, int(windowWidth/13), 100, int(windowWidth/4), int(windowHeight/20), min=0, max=100, step=1)
     outputMaster = TextBox(windowSurface, sliderMaster.getX()+sliderMaster.getWidth()+80, sliderMaster.getY(), 50, 50, fontSize=30)
     outputMaster.disable()
 
-    sliderMusic = Slider(windowSurface, 100, 150, int(windowWidth/4), int(windowHeight/20), min=0, max=100, step=1)
+    sliderMusic = Slider(windowSurface, int(windowWidth/13), 150, int(windowWidth/4), int(windowHeight/20), min=0, max=100, step=1)
     outputMusic = TextBox(windowSurface, sliderMusic.getX()+sliderMusic.getWidth()+80, sliderMusic.getY(), 50, 50, fontSize=30)
     outputMusic.disable()
 
-    sliderPiano = Slider(windowSurface, 100, 200, int(windowWidth/4), int(windowHeight/20), min=0, max=100, step=1)
+    sliderPiano = Slider(windowSurface, int(windowWidth/13), 200, int(windowWidth/4), int(windowHeight/20), min=0, max=100, step=1)
     outputPiano = TextBox(windowSurface, sliderPiano.getX()+sliderPiano.getWidth()+80, sliderPiano.getY(), 50, 50, fontSize=30)
     outputPiano.disable()
 
     f=open("resources/settings.txt")
     values=f.readlines()
     f.close()
-    for i in values:
-        i=i.strip()
+    for i in range(len(values)):
+        values[i]=values[i].strip()
     sliderMaster.setValue(int(values[0]))
     sliderMusic.setValue(int(values[1]))
     sliderPiano.setValue(int(values[2]))
@@ -55,7 +64,7 @@ def showSettings():
 
 
     while True:
-        windowSurface.fill((255,255,255))
+        windowSurface.fill(WHITE)
 
         return_button: Rect = pygame.Rect(15, 8*windowHeight/9-15, windowWidth/9, windowHeight/9)
 
@@ -90,17 +99,17 @@ def showSettings():
                 if event.key == pygame.K_ESCAPE:
                     terminate()
 
-        pygame.draw.rect(windowSurface, (255, 204, 203), return_button)
-        pygame.draw.rect(windowSurface, (255, 204, 203), easy_button)
-        pygame.draw.rect(windowSurface, (255, 204, 203), normal_button)
-        pygame.draw.rect(windowSurface, (255, 204, 203), hard_button)
+        pygame.draw.rect(windowSurface, LIGHT_RED, return_button)
+        pygame.draw.rect(windowSurface, LIGHT_RED, easy_button)
+        pygame.draw.rect(windowSurface, LIGHT_RED, normal_button)
+        pygame.draw.rect(windowSurface, LIGHT_RED, hard_button)
 
         if(selected=="easy"):
-            pygame.draw.rect(windowSurface, (220,20,50), easy_button)
+            pygame.draw.rect(windowSurface, DARK_RED, easy_button)
         elif (selected=="normal"):
-            pygame.draw.rect(windowSurface, (220,20,50), normal_button)
+            pygame.draw.rect(windowSurface, DARK_RED, normal_button)
         else:
-            pygame.draw.rect(windowSurface, (220,20,50), hard_button)
+            pygame.draw.rect(windowSurface, DARK_RED, hard_button)
 
         drawText("Settings",windowSurface,0,0, titleFont)
         drawText("Volume",windowSurface,5,50, subheadingFont)
@@ -127,7 +136,7 @@ def terminate():
     pygame.quit()
     sys.exit()
 
-def drawText(text, surface, x, y, font, color=(255, 0, 0)):
+def drawText(text, surface, x, y, font, color=RED):
     textObject = font.render(text, True, color)
     textRect = textObject.get_rect()
     textRect.topleft = (x, y)
