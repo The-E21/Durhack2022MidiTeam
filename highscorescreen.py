@@ -100,6 +100,7 @@ def highScoreDisplay():
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
 
 
+
         pygame.display.update()
 
 def terminate():
@@ -111,5 +112,17 @@ def drawText(text, surface, x, y, font, color=(255, 0, 0)):
     textRect = textObject.get_rect()
     textRect.topleft = (x, y)
     surface.blit(textObject, textRect)
+
+def findSmallestScore():
+    f=open("resources/highScores.txt")
+    allScores=f.readlines()
+    f.close()
+    scores = [ [0]*2 for i in range(len(allScores))]
+    for i in range(len(allScores)):
+        allScores[i]=allScores[i].replace('\n','').strip()
+        scores[i]=allScores[i].replace('\n','').split(',')
+
+    scores=sorted(scores, key=lambda x: int(x[1]), reverse=True)
+    return scores[-1][1]
 
 highScoreDisplay()
