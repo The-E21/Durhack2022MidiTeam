@@ -51,7 +51,7 @@ def playGame():
             self.noteVal = noteVal
             self.handled = False
             self.min = 0
-            
+
     keys = [
         Key(5, 22*windowHeight/95, pygame.K_s, 79),
         Key(5, 25*windowHeight/95, pygame.K_d, 77),
@@ -103,26 +103,31 @@ def playGame():
         bps = 11/4
         musicDelayFrames = 4.8 * fps
         time_remaining = 80
-    
+
     musicVolume = (int(settings[0]) * int(settings[1])) / 10000
     pianoVolume = (int(settings[0]) * int(settings[2])) / 10000
     mixer.music.set_volume(musicVolume)
     print(musicDelayFrames)
     keyboardConnected = True
     heldNotes = []
-    
+
+
+
+
+
     timer: int = 0
     try:
         midiInp = pygame.midi.Input(pygame.midi.get_default_input_id())
         midiOut = pygame.midi.Output(pygame.midi.get_default_output_id())
     except:
         keyboardConnected = False
-    
+
     map_rect = loadmap("map", windowWidth, keys, multiplier)
 
     score = 0
     while True:
         windowSurface.fill(WHITE)
+
         backButton: Rect = pygame.Rect(8*windowWidth/9-15, 15, windowWidth/9, windowHeight/9)
         if(timer == musicDelayFrames):
             mixer.music.play()
@@ -146,7 +151,7 @@ def playGame():
                 else:
                     midiOut.note_on(event.data1,int(event.data2 * pianoVolume))
                     heldNotes.append((event.data1,int(event.data2 * pianoVolume)))
-        
+
         if keyboardConnected and midiInp.poll():
             midi_events = midiInp.read(10)
             # convert them into pygame events.
@@ -154,7 +159,7 @@ def playGame():
 
             for m_e in midi_evs:
                 event_post(m_e)
-        
+
         k = pygame.key.get_pressed()
         heldKeys = []
         for note in heldNotes:
@@ -178,7 +183,7 @@ def playGame():
                 pygame.draw.rect(windowSurface, key.colour1, key.rect)
                 key.handled = True
             pygame.draw.rect(windowSurface, BLACK, key.rect, 1)
-                    
+
 
         pygame.draw.rect(windowSurface, LIGHT_RED, backButton)
         pygame.draw.rect(windowSurface, DARK_RED, backButton, 10)
@@ -189,7 +194,7 @@ def playGame():
                  pygame.font.SysFont('calibri', round(80 * scale)), BLACK)
         drawText("Back", windowSurface, 8*windowWidth/9+15, 40,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
-        
+
         mainClock.tick(fps)
         timer += 1
         if timer % 60 == 0:
@@ -234,7 +239,7 @@ def gameOver(score, surface, windowWidth, windowHeight, scale):
         surface.fill(0,0,0)
         drawText("Congrats! Your score was: " + str(score), surface, windowWidth/4, windowHeight/2,
                  pygame.font.SysFont('calibri', round(120*scale), (255,0,0)))
-        
+
     else:
         surface.fill((0,0,0))
         drawText("Unlucky! Your score was: " + str(score), surface, windowWidth/4, windowHeight/2,
@@ -246,11 +251,15 @@ def removeNote(notes, noteVal):
     for i in range(len(notes)):
         if notes[i][0] == noteVal:
             rtn = notes[i]
-    
+
     if rtn != None:
         notes.remove(rtn)
         return rtn
     else:
         return None
+
+def output():
+    pass
+
 
 playGame()
