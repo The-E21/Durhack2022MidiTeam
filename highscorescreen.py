@@ -59,8 +59,8 @@ def highScoreDisplay():
         scores = [ [0]*2 for i in range(len(texts))]
 
         for i in range(len(texts)):
-            texts[i]=texts[i].strip()
-            scores[i]=texts[i].split(',')
+            texts[i]=texts[i].replace('\n','').strip()
+            scores[i]=texts[i].replace('\n','').split(',')
 
         scores=sorted(scores, key=lambda x: int(x[1]), reverse=True)
 
