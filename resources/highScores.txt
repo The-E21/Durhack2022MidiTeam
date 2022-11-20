@@ -1,0 +1,10 @@
+JOE,1000
+abc,2000
+def,500
+ghi,400
+jkl,800
+JAN,1000
+mno,2000
+pqr,500
+stu,400
+vwx,800

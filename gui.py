@@ -32,6 +32,7 @@ def mainMenu():
         quit_button: Rect = pygame.Rect(15, 8*windowHeight/9-15, windowWidth/9, windowHeight/9)
         play_button: Rect = pygame.Rect(15, 3*windowHeight/9-15, windowWidth/6, windowHeight/9)
         settings_button: Rect = pygame.Rect(15, 5*windowHeight/11-15, windowWidth/6, windowHeight/9)
+        scores_button: Rect = pygame.Rect(15, 6*windowHeight/11-5, windowWidth/5, windowHeight/9)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -48,28 +49,35 @@ def mainMenu():
                 if settings_button.collidepoint(pygame.mouse.get_pos()):
                     from settingscreen import showSettings
                     showSettings()
+                if scores_button.collidepoint(pygame.mouse.get_pos()):
+                    from highscorescreen import highScoreDisplay
+                    highScoreDisplay()
 
         pygame.draw.rect(windowSurface, LIGHT_RED, quit_button)
         pygame.draw.rect(windowSurface, DARK_RED, quit_button, 10)
-        
+
         pygame.draw.rect(windowSurface, LIGHT_RED, play_button)
         pygame.draw.rect(windowSurface, DARK_RED, play_button, 10)
 
         pygame.draw.rect(windowSurface, LIGHT_RED, settings_button)
         pygame.draw.rect(windowSurface, DARK_RED, settings_button, 10)
-        
+
+        pygame.draw.rect(windowSurface, LIGHT_RED, scores_button)
+        pygame.draw.rect(windowSurface, DARK_RED, scores_button, 10)
 
         drawText("Exit", windowSurface, 40, 8*windowHeight/9 + 5,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
         drawText("Play it", windowSurface, 40, 3*windowHeight/9 + 5,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
-        drawText("Title", windowSurface, 30, windowHeight/12, 
+        drawText("Title", windowSurface, 30, windowHeight/12,
                  pygame.font.SysFont('calibri', round(140 * scale)), BLACK)
-        drawText("Settings", windowSurface, 40, 4*windowHeight/9+15, 
+        drawText("Settings", windowSurface, 40, 4*windowHeight/9+15,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
-        
+        drawText("High scores", windowSurface, 40, 5*windowHeight/9+15,
+                 pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
+
         img = pygame.image.load("resources/treble_clef.png")
-        windowSurface.blit(img, (600, 300))
+        windowSurface.blit(img, (4*windowWidth/9, 2*windowHeight/5))
 
         pygame.display.update()
 
