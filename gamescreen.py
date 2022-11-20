@@ -163,7 +163,7 @@ def playGame():
         for rect in map_rect:
             pygame.draw.rect(windowSurface,(200,0,0), rect)
             float_x = x_dict[map_rect.index(rect)]
-            float_x -= 0.8727271 * multiplier*bps/fps
+            float_x -= multiplier*bps/fps
             x_dict.update({map_rect.index(rect): float_x})
             rect.x = int(float_x)
 
