@@ -91,19 +91,17 @@ def playGame():
     if settings[3] == "easy\n":
         mixer.music.load("resources/AugmentedMusicEasy.wav")
         bps = 11/9
-        musicDelayFrames = 10 * fps
         time_remaining = 170
     elif settings[3] == "normal\n":
         mixer.music.load("resources/AugmentedSongNormal.wav")
         bps = 11/6
-        musicDelayFrames = 6 * fps
         time_remaining = 120
     else:
         mixer.music.load("resources/AugmentedSongHard.wav")
         bps = 11/4
-        musicDelayFrames = 4.2 * fps
         time_remaining = 80
     
+    musicDelayFrames = fps*(windowWidth -  105)//int(multiplier*bps)
     musicVolume = (int(settings[0]) * int(settings[1])) / 10000
     pianoVolume = (int(settings[0]) * int(settings[2])) / 10000
     mixer.music.set_volume(musicVolume)
