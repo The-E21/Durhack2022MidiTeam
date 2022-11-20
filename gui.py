@@ -69,7 +69,7 @@ def mainMenu():
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
         
         img = pygame.image.load("resources/treble_clef.png")
-        windowSurface.blit(img, (600, 300))
+        windowSurface.blit(img, (4*windowWidth/9, 2*windowHeight/5))
 
         pygame.display.update()
 
