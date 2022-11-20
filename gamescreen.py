@@ -5,6 +5,7 @@ from pygame import mixer
 import pygame.midi
 import pygame_widgets
 from pygame_widgets.textbox import TextBox
+from note_seperator import noteSeperator
 
 def playGame():
     fps = 60
@@ -24,6 +25,7 @@ def playGame():
     WHITE: tuple = (255,255,255)
     LIGHT_GREY: tuple = (211, 211, 211)
     RED: tuple[int, int, int] = (255, 0, 0)
+    BLUE: tuple[int,int,int] = (0,0,255)
     LIGHT_RED: tuple[int, int, int] = (255, 204, 203)
     DARK_RED: tuple[int, int, int] = (220,20,50)
     BLACK: tuple = (0,0,0)
@@ -39,7 +41,7 @@ def playGame():
     # pygame.display.set_icon(pygame.image.load('resources/logo.png'))
 
     class Key():
-        def __init__(self, x, y, key, noteVal, colour1=LIGHT_GREY, width=100, height=30, colour2=RED):
+        def __init__(self, x, y, key, noteVal, colour1=LIGHT_GREY, width=100, height=30, colour2=BLUE):
             self.x = x
             self.y = y
             self.colour1 = colour1
@@ -91,19 +93,24 @@ def playGame():
     if settings[3] == "easy\n":
         mixer.music.load("resources/AugmentedMusicEasy.wav")
         bps = 11/9
-        musicDelayFrames = 10 * fps
         time_remaining = 170
     elif settings[3] == "normal\n":
         mixer.music.load("resources/AugmentedSongNormal.wav")
         bps = 11/6
-        musicDelayFrames = 6 * fps
         time_remaining = 120
     else:
         mixer.music.load("resources/AugmentedSongHard.wav")
         bps = 11/4
+<<<<<<< HEAD
         musicDelayFrames = 4.8 * fps
         time_remaining = 3
 
+=======
+        time_remaining = 80
+    
+    musicDelayFrames = fps*(windowWidth -  105)//int(multiplier*bps)
+    forgiveFrames = 20
+>>>>>>> 59def4d7d573872c1ffb5f3d005a3fa5f25d0000
     musicVolume = (int(settings[0]) * int(settings[1])) / 10000
     pianoVolume = (int(settings[0]) * int(settings[2])) / 10000
     mixer.music.set_volume(musicVolume)
@@ -122,11 +129,23 @@ def playGame():
         midiOut = pygame.midi.Output(pygame.midi.get_default_output_id())
     except:
         keyboardConnected = False
+<<<<<<< HEAD
 
     map_rect = loadmap("map", windowWidth, keys, multiplier)
 
     score = 0
     #name = gameStart(windowSurface, windowWidth, windowHeight, scale)
+=======
+    
+    allNotes = noteSeperator("map")
+    print(allNotes)
+    (map_rect, x_dict) = loadmap("map", windowWidth, keys, multiplier)
+
+    score = 0
+
+    requireKeys = [False] * 32
+
+>>>>>>> 59def4d7d573872c1ffb5f3d005a3fa5f25d0000
     while True:
         windowSurface.fill(WHITE)
 
@@ -153,7 +172,15 @@ def playGame():
                 else:
                     midiOut.note_on(event.data1,int(event.data2 * pianoVolume))
                     heldNotes.append((event.data1,int(event.data2 * pianoVolume)))
+<<<<<<< HEAD
 
+=======
+                    rNote = checkRequireNote(event.data1,timer,forgiveFrames,fps,bps,allNotes,musicDelayFrames)
+                    if not rNote == -1:
+                        score += 10
+                        allNotes[event.data1 % 48].remove(rNote)
+        
+>>>>>>> 59def4d7d573872c1ffb5f3d005a3fa5f25d0000
         if keyboardConnected and midiInp.poll():
             midi_events = midiInp.read(10)
             # convert them into pygame events.
@@ -169,7 +196,11 @@ def playGame():
 
         for rect in map_rect:
             pygame.draw.rect(windowSurface,(200,0,0), rect)
-            rect.x -= multiplier*bps/fps
+            float_x = x_dict[map_rect.index(rect)]
+            float_x -= multiplier*bps/fps
+            x_dict.update({map_rect.index(rect): float_x})
+            rect.x = int(float_x)
+
 
         pygame.draw.rect(windowSurface, WHITE, pygame.Rect(0,0,5,windowHeight))
 
@@ -215,7 +246,8 @@ def drawText(text, surface, x, y, font, color=(255, 0, 0)):
 
 def loadmap(map, windowWidth, keys, m):
     rects = []
-    from note_seperator import noteSeperator
+    x_dict = {}
+    index = 0
     allNotes = noteSeperator(map)
     print(allNotes)
     for noteList in allNotes:
@@ -226,20 +258,41 @@ def loadmap(map, windowWidth, keys, m):
                     if (key.noteVal % 48) == allNotes.index(noteList):
                         y = key.y
                         height = key.height
+                        x = float((windowWidth+ m*float(note[0])))
                         rects.append(pygame.Rect((windowWidth+ m*float(note[0])), y, m*(float(note[1])-float(note[0])), height))
-    return rects
+                        x_dict.update({index: x})
+                        index += 1
+    return rects, x_dict
 
+<<<<<<< HEAD
 def gameOver(score, surface, windowWidth, windowHeight, scale, file_added):
     f = open("resources/highScores.txt", "a")
+=======
+def gameOver(score, surface, windowWidth, windowHeight, scale):
+    f = open("resources/highScores.txt", "a+")
+>>>>>>> 59def4d7d573872c1ffb5f3d005a3fa5f25d0000
     from highscorescreen import findSmallestScore
     min = findSmallestScore()
     if score > int(min):
         surface.fill((0,0,0))
         drawText("Congrats! Your score was: " + str(score), surface, windowWidth/4, windowHeight/2,
+<<<<<<< HEAD
                  pygame.font.SysFont('calibri', round(80*scale), (255,0,0)))
         if(file_added==False):
             f.write('\n'+"MRX"+ ','+str(score))
             file_added=True
+=======
+                 pygame.font.SysFont('calibri', round(120*scale), (255,0,0)))
+        name = "test" # INSERT NAME GETTER HERE
+        lines = f.readlines()
+        for line in lines:
+            if min in line:
+                parts = line.replace("\n", "").replace(" ", "").split(",")
+                parts[0] = name
+                parts[1] = score
+                outLine = ",".join(parts)
+                f.write("\n" + outLine)
+>>>>>>> 59def4d7d573872c1ffb5f3d005a3fa5f25d0000
     else:
         surface.fill((0,0,0))
         drawText("Unlucky! Your score was: " + str(score), surface, windowWidth/4, windowHeight/2,
@@ -278,8 +331,18 @@ def removeNote(notes, noteVal):
     else:
         return None
 
+<<<<<<< HEAD
 def output():
     pass
 
+=======
+def checkRequireNote(note,frame,forgiveframes,fps,bps,allNotes,musicDelayFrames):
+    for inote in allNotes[note%48]:
+        checkFrame = float(inote[0]) * fps/bps + musicDelayFrames
+        if(frame >= checkFrame - forgiveframes) and (frame <= checkFrame + forgiveframes):
+            return inote
+    
+    return -1
+>>>>>>> 59def4d7d573872c1ffb5f3d005a3fa5f25d0000
 
 playGame()

@@ -32,7 +32,7 @@ def mainMenu():
         quit_button: Rect = pygame.Rect(15, 8*windowHeight/9-15, windowWidth/9, windowHeight/9)
         play_button: Rect = pygame.Rect(15, 3*windowHeight/9-15, windowWidth/6, windowHeight/9)
         settings_button: Rect = pygame.Rect(15, 5*windowHeight/11-15, windowWidth/6, windowHeight/9)
-        scores_button: Rect = pygame.Rect(15, 6*windowHeight/11-5, windowWidth/5, windowHeight/9)
+        scores_button: Rect = pygame.Rect(15, 6.2*windowHeight/11-5, windowWidth/5, windowHeight/9)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -69,12 +69,12 @@ def mainMenu():
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
         drawText("Play it", windowSurface, 40, 3*windowHeight/9 + 5,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
-        drawText("Title", windowSurface, 30, windowHeight/12,
+        drawText("Augmented Rhythm", windowSurface, 30, windowHeight/12,
                  pygame.font.SysFont('calibri', round(140 * scale)), BLACK)
         drawText("Settings", windowSurface, 40, 4*windowHeight/9+15,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
-        drawText("High scores", windowSurface, 40, 5*windowHeight/9+15,
-                 pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
+        drawText("High scores", windowSurface, 40, 5.1*windowHeight/9+15,
+                 pygame.font.SysFont('calibri', round(90 * scale)), BLACK)
 
         img = pygame.image.load("resources/treble_clef.png")
         windowSurface.blit(img, (4*windowWidth/9, 2*windowHeight/5))
