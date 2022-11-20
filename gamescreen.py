@@ -90,7 +90,7 @@ def playGame():
         bps = 11/9
         musicDelayFrames = 8 * fps
     elif settings[3] == "normal\n":
-        mixer.music.load("resources/AugmentedMusic.wav")
+        mixer.music.load("resources/AugmentedSongNormal.wav")
         bps = 11/6
         musicDelayFrames = 6 * fps
     else:
@@ -160,7 +160,6 @@ def playGame():
             rect.x -= multiplier*bps/fps
             for key in keys:
                 if key.rect.colliderect(rect) and not key.handled:
-                    map_rect.remove(rect)
                     key.handled = True
 
         pygame.draw.rect(windowSurface, WHITE, pygame.Rect(0,0,5,windowHeight))
