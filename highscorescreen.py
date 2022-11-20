@@ -1,5 +1,6 @@
 import pygame
 import sys
+import math
 
 pygame.init()
 
@@ -65,15 +66,22 @@ def highScoreDisplay():
         scores=sorted(scores, key=lambda x: int(x[1]), reverse=True)
 
 
-        for i in range(5):
+        x=5
+        if(len(texts)<=5):
+            x=math.floor(len(texts))
+        elif(len(texts)<10):
+            x=math.floor(len(texts)/2)
+
+        for i in range(x):
             drawText(scores[i][0], windowSurface, windowWidth/5, (3+i)*windowHeight/9,
                  pygame.font.SysFont('calibri', round(50 * scale)), BLACK)
             drawText(scores[i][1], windowSurface, 2*windowWidth/5, (3+i)*windowHeight/9,
                  pygame.font.SysFont('calibri', round(50 * scale)), BLACK)
-            drawText(scores[i+5][0], windowSurface, 3*windowWidth/5, (3+i)*windowHeight/9,
-                 pygame.font.SysFont('calibri', round(50 * scale)), BLACK)
-            drawText(scores[i+5][1], windowSurface, 4*windowWidth/5, (3+i)*windowHeight/9,
-                 pygame.font.SysFont('calibri', round(50 * scale)), BLACK)
+            if(len(texts)>5):
+                drawText(scores[i+x][0], windowSurface, 3*windowWidth/5, (3+i)*windowHeight/9,
+                     pygame.font.SysFont('calibri', round(50 * scale)), BLACK)
+                drawText(scores[i+x][1], windowSurface, 4*windowWidth/5, (3+i)*windowHeight/9,
+                     pygame.font.SysFont('calibri', round(50 * scale)), BLACK)
 
         pygame.draw.line(windowSurface,BLACK,(2.625*windowWidth/5,2*windowHeight/9),(2.625*windowWidth/5,8*windowHeight/9))
 
