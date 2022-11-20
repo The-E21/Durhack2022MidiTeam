@@ -5,6 +5,7 @@ from pygame import mixer
 import pygame.midi
 import pygame_widgets
 from pygame_widgets.textbox import TextBox
+from note_seperator import noteSeperator
 
 def playGame():
     fps = 60
@@ -103,6 +104,7 @@ def playGame():
         time_remaining = 80
     
     musicDelayFrames = fps*(windowWidth -  105)//int(multiplier*bps)
+    forgiveFrames = 20
     musicVolume = (int(settings[0]) * int(settings[1])) / 10000
     pianoVolume = (int(settings[0]) * int(settings[2])) / 10000
     mixer.music.set_volume(musicVolume)
@@ -117,9 +119,14 @@ def playGame():
     except:
         keyboardConnected = False
     
+    allNotes = noteSeperator("map")
+    print(allNotes)
     (map_rect, x_dict) = loadmap("map", windowWidth, keys, multiplier)
 
     score = 0
+
+    requireKeys = [False] * 32
+
     while True:
         windowSurface.fill(WHITE)
         backButton: Rect = pygame.Rect(8*windowWidth/9-15, 15, windowWidth/9, windowHeight/9)
@@ -145,6 +152,10 @@ def playGame():
                 else:
                     midiOut.note_on(event.data1,int(event.data2 * pianoVolume))
                     heldNotes.append((event.data1,int(event.data2 * pianoVolume)))
+                    rNote = checkRequireNote(event.data1,timer,forgiveFrames,fps,bps,allNotes,musicDelayFrames)
+                    if not rNote == -1:
+                        score += 10
+                        allNotes[event.data1 % 48].remove(rNote)
         
         if keyboardConnected and midiInp.poll():
             midi_events = midiInp.read(10)
@@ -213,7 +224,6 @@ def loadmap(map, windowWidth, keys, m):
     rects = []
     x_dict = {}
     index = 0
-    from note_seperator import noteSeperator
     allNotes = noteSeperator(map)
     print(allNotes)
     for noteList in allNotes:
@@ -264,5 +274,13 @@ def removeNote(notes, noteVal):
         return rtn
     else:
         return None
+
+def checkRequireNote(note,frame,forgiveframes,fps,bps,allNotes,musicDelayFrames):
+    for inote in allNotes[note%48]:
+        checkFrame = float(inote[0]) * fps/bps + musicDelayFrames
+        if(frame >= checkFrame - forgiveframes) and (frame <= checkFrame + forgiveframes):
+            return inote
+    
+    return -1
 
 playGame()
