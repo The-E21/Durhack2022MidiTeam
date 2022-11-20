@@ -104,7 +104,7 @@ def playGame():
         time_remaining = 80
     
     musicDelayFrames = fps*(windowWidth -  105)//int(multiplier*bps)
-    forgiveFrames = 20
+    forgiveFrames = 7
     musicVolume = (int(settings[0]) * int(settings[1])) / 10000
     pianoVolume = (int(settings[0]) * int(settings[2])) / 10000
     mixer.music.set_volume(musicVolume)
@@ -120,7 +120,6 @@ def playGame():
         keyboardConnected = False
     
     allNotes = noteSeperator("map")
-    print(allNotes)
     (map_rect, x_dict) = loadmap("map", windowWidth, keys, multiplier)
 
     score = 0
@@ -142,10 +141,11 @@ def playGame():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if backButton.collidepoint(pygame.mouse.get_pos()):
                     mixer.music.stop()
+                    midiOut.close()
+                    midiInp.close()
                     from gui import mainMenu
                     mainMenu()
             if event.type in [pygame.midi.MIDIIN]:
-                print(event)
                 note = removeNote(heldNotes,event.data1)
                 if note != None:
                     midiOut.note_off(note[0],note[1])
@@ -225,11 +225,9 @@ def loadmap(map, windowWidth, keys, m):
     x_dict = {}
     index = 0
     allNotes = noteSeperator(map)
-    print(allNotes)
     for noteList in allNotes:
         if len(noteList) != 0:
             for note in noteList:
-                print(note)
                 for key in keys:
                     if (key.noteVal % 48) == allNotes.index(noteList):
                         y = key.y
