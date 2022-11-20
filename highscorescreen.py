@@ -124,5 +124,3 @@ def findSmallestScore():
 
     scores=sorted(scores, key=lambda x: int(x[1]), reverse=True)
     return scores[-1][1]
-
-highScoreDisplay()
