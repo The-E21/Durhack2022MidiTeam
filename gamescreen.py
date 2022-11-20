@@ -84,23 +84,24 @@ def playGame():
         Key(5, 62.5*windowHeight/95, pygame.K_e,56, BLACK, 45, 20),
         ]
 
-
-    if settings[3] == "easy":
+    musicDelayFrames = 0
+    if settings[3] == "easy\n":
         mixer.music.load("resources/AugmentedMusicEasy.wav")
         bps = 11/9
-    elif settings[3] == "normal":
+        musicDelayFrames = 8 * fps
+    elif settings[3] == "normal\n":
         mixer.music.load("resources/AugmentedMusic.wav")
         bps = 11/6
+        musicDelayFrames = 6 * fps
     else:
         mixer.music.load("resources/AugmentedSongHard.wav")
         bps = 11/4
+        musicDelayFrames = 4.8 * fps
     
     musicVolume = (int(settings[0]) * int(settings[1])) / 10000
     pianoVolume = (int(settings[0]) * int(settings[2])) / 10000
     mixer.music.set_volume(musicVolume)
-    print(musicVolume)
-    mixer.music.play()
-
+    print(musicDelayFrames)
     keyboardConnected = True
     heldNotes = []
     
@@ -116,7 +117,8 @@ def playGame():
     while True:
         windowSurface.fill(WHITE)
         backButton: Rect = pygame.Rect(8*windowWidth/9-15, 15, windowWidth/9, windowHeight/9)
-
+        if(timer == musicDelayFrames):
+            mixer.music.play()
         #if timer == notes[0][0]:
         #    pass
 
