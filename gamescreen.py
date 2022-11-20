@@ -107,7 +107,7 @@ def playGame():
 
 =======
         time_remaining = 80
-    
+
     musicDelayFrames = fps*(windowWidth -  105)//int(multiplier*bps)
     forgiveFrames = 20
 >>>>>>> 59def4d7d573872c1ffb5f3d005a3fa5f25d0000
@@ -136,7 +136,7 @@ def playGame():
     score = 0
     #name = gameStart(windowSurface, windowWidth, windowHeight, scale)
 =======
-    
+
     allNotes = noteSeperator("map")
     print(allNotes)
     (map_rect, x_dict) = loadmap("map", windowWidth, keys, multiplier)
@@ -179,7 +179,7 @@ def playGame():
                     if not rNote == -1:
                         score += 10
                         allNotes[event.data1 % 48].remove(rNote)
-        
+
 >>>>>>> 59def4d7d573872c1ffb5f3d005a3fa5f25d0000
         if keyboardConnected and midiInp.poll():
             midi_events = midiInp.read(10)
@@ -268,8 +268,6 @@ def loadmap(map, windowWidth, keys, m):
 def gameOver(score, surface, windowWidth, windowHeight, scale, file_added):
     f = open("resources/highScores.txt", "a")
 =======
-def gameOver(score, surface, windowWidth, windowHeight, scale):
-    f = open("resources/highScores.txt", "a+")
 >>>>>>> 59def4d7d573872c1ffb5f3d005a3fa5f25d0000
     from highscorescreen import findSmallestScore
     min = findSmallestScore()
@@ -341,7 +339,7 @@ def checkRequireNote(note,frame,forgiveframes,fps,bps,allNotes,musicDelayFrames)
         checkFrame = float(inote[0]) * fps/bps + musicDelayFrames
         if(frame >= checkFrame - forgiveframes) and (frame <= checkFrame + forgiveframes):
             return inote
-    
+
     return -1
 >>>>>>> 59def4d7d573872c1ffb5f3d005a3fa5f25d0000
 
