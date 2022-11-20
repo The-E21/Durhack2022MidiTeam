@@ -155,6 +155,16 @@ def playGame():
         for note in heldNotes:
             heldKeys.append(note[0])
 
+        for rect in map_rect:
+            pygame.draw.rect(windowSurface,(200,0,0), rect)
+            rect.x -= multiplier*bps/fps
+            for key in keys:
+                if key.rect.colliderect(rect) and not key.handled:
+                    map_rect.remove(rect)
+                    key.handled = True
+
+        pygame.draw.rect(windowSurface, WHITE, pygame.Rect(0,0,5,windowHeight))
+
         for key in keys:
             if key.noteVal in heldKeys:
                 pygame.draw.rect(windowSurface, key.colour2, key.rect)
@@ -163,14 +173,6 @@ def playGame():
                 pygame.draw.rect(windowSurface, key.colour1, key.rect)
                 key.handled = True
             pygame.draw.rect(windowSurface, BLACK, key.rect, 1)
-
-        for rect in map_rect:
-            pygame.draw.rect(windowSurface,(200,0,0), rect)
-            rect.x -= multiplier*bps/fps
-            for key in keys:
-                if key.rect.colliderect(rect) and not key.handled:
-                    map_rect.remove(rect)
-                    key.handled = True
                     
 
         pygame.draw.rect(windowSurface, LIGHT_RED, backButton)
