@@ -97,7 +97,7 @@ def playGame():
         mixer.music.load("resources/AugmentedSongNormal.wav")
         bps = 11/6
         musicDelayFrames = 6 * fps
-        time_remaining = 5
+        time_remaining = 120
     else:
         mixer.music.load("resources/AugmentedSongHard.wav")
         bps = 11/4
@@ -227,14 +227,22 @@ def loadmap(map, windowWidth, keys, m):
     return rects
 
 def gameOver(score, surface, windowWidth, windowHeight, scale):
-    f = open("resources/highScores.txt", "r+")
+    f = open("resources/highScores.txt", "a+")
     from highscorescreen import findSmallestScore
     min = findSmallestScore()
     if score > int(min):
         surface.fill(0,0,0)
         drawText("Congrats! Your score was: " + str(score), surface, windowWidth/4, windowHeight/2,
                  pygame.font.SysFont('calibri', round(120*scale), (255,0,0)))
-        
+        name = "test" # INSERT NAME GETTER HERE
+        lines = f.readlines()
+        for line in lines:
+            if min in line:
+                parts = line.replace("\n", "").replace(" ", "").split(",")
+                parts[0] = name
+                parts[1] = score
+                outLine = ",".join(parts)
+                f.write("\n" + outLine)
     else:
         surface.fill((0,0,0))
         drawText("Unlucky! Your score was: " + str(score), surface, windowWidth/4, windowHeight/2,
