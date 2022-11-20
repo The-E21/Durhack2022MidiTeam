@@ -118,7 +118,7 @@ def playGame():
     except:
         keyboardConnected = False
     
-    map_rect = loadmap("map", windowWidth, keys, multiplier)
+    (map_rect, x_dict) = loadmap("map", windowWidth, keys, multiplier)
 
     score = 0
     while True:
@@ -162,7 +162,11 @@ def playGame():
 
         for rect in map_rect:
             pygame.draw.rect(windowSurface,(200,0,0), rect)
-            rect.x -= multiplier*bps/fps
+            float_x = x_dict[map_rect.index(rect)]
+            float_x -= multiplier*bps/fps
+            x_dict.update({map_rect.index(rect): float_x})
+            rect.x = int(float_x)
+
 
         pygame.draw.rect(windowSurface, WHITE, pygame.Rect(0,0,5,windowHeight))
 
@@ -208,6 +212,8 @@ def drawText(text, surface, x, y, font, color=(255, 0, 0)):
 
 def loadmap(map, windowWidth, keys, m):
     rects = []
+    x_dict = {}
+    index = 0
     from note_seperator import noteSeperator
     allNotes = noteSeperator(map)
     print(allNotes)
@@ -219,8 +225,11 @@ def loadmap(map, windowWidth, keys, m):
                     if (key.noteVal % 48) == allNotes.index(noteList):
                         y = key.y
                         height = key.height
+                        x = float((windowWidth+ m*float(note[0])))
                         rects.append(pygame.Rect((windowWidth+ m*float(note[0])), y, m*(float(note[1])-float(note[0])), height))
-    return rects
+                        x_dict.update({index: x})
+                        index += 1
+    return rects, x_dict
 
 def gameOver(score, surface, windowWidth, windowHeight, scale):
     f = open("resources/highScores.txt", "a+")
