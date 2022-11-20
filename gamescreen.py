@@ -101,7 +101,7 @@ def playGame():
     else:
         mixer.music.load("resources/AugmentedSongHard.wav")
         bps = 11/4
-        musicDelayFrames = 4.8 * fps
+        musicDelayFrames = 4.2 * fps
         time_remaining = 80
     
     musicVolume = (int(settings[0]) * int(settings[1])) / 10000
@@ -162,7 +162,7 @@ def playGame():
 
         for rect in map_rect:
             pygame.draw.rect(windowSurface,(200,0,0), rect)
-            rect.x -= multiplier*bps/fps
+            rect.x -= 0.8727271 * multiplier*bps/fps
 
         pygame.draw.rect(windowSurface, WHITE, pygame.Rect(0,0,5,windowHeight))
 
