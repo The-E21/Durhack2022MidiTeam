@@ -12,6 +12,8 @@ DARK_RED = (220,20,50)
 BLUE = (0, 0, 255)
 GREY = (194, 196, 194)
 DARK_GREY = (90, 91, 90)
+GOLD = (218,165,32)
+BRONZE = (150,116,68)
 
 monitorInfoObject = pygame.display.Info()
 windowWidth: int = monitorInfoObject.current_w
@@ -52,7 +54,7 @@ def highScoreDisplay():
         drawText("Name",windowSurface,3*windowWidth/5,2*windowHeight/9,pygame.font.SysFont('calibri', round(70 * scale)), BLACK)
         drawText("Score",windowSurface,4*windowWidth/5,2*windowHeight/9,pygame.font.SysFont('calibri', round(70 * scale)), BLACK)
 
-        f=open("resources/highScores.txt")
+        f=open("resources/highScores.txt",)
         texts=f.readlines()
         f.close()
 
@@ -73,10 +75,18 @@ def highScoreDisplay():
             x=math.floor(len(texts)/2)
 
         for i in range(x):
+            if(i==0):
+                colour=GOLD
+            elif(i==1):
+                colour=GREY
+            elif(i==2):
+                colour=BRONZE
+            else:
+                colour=BLACK
             drawText(scores[i][0], windowSurface, windowWidth/5, (3+i)*windowHeight/9,
-                 pygame.font.SysFont('calibri', round(50 * scale)), BLACK)
+                 pygame.font.SysFont('calibri', round(50 * scale)), colour)
             drawText(scores[i][1], windowSurface, 2*windowWidth/5, (3+i)*windowHeight/9,
-                 pygame.font.SysFont('calibri', round(50 * scale)), BLACK)
+                 pygame.font.SysFont('calibri', round(50 * scale)), colour)
             if(len(texts)>5):
                 drawText(scores[i+x][0], windowSurface, 3*windowWidth/5, (3+i)*windowHeight/9,
                      pygame.font.SysFont('calibri', round(50 * scale)), BLACK)
