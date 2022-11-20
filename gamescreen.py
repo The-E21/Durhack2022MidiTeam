@@ -53,7 +53,7 @@ def playGame():
             self.noteVal = noteVal
             self.handled = False
             self.min = 0
-            
+
     keys = [
         Key(5, 22*windowHeight/95, pygame.K_s, 79),
         Key(5, 25*windowHeight/95, pygame.K_d, 77),
@@ -111,13 +111,23 @@ def playGame():
     print(musicDelayFrames)
     keyboardConnected = True
     heldNotes = []
-    
+
+
+
+
+
     timer: int = 0
+    file_added=False
     try:
         midiInp = pygame.midi.Input(pygame.midi.get_default_input_id())
         midiOut = pygame.midi.Output(pygame.midi.get_default_output_id())
     except:
         keyboardConnected = False
+
+    map_rect = loadmap("map", windowWidth, keys, multiplier)
+
+    score = 0
+    #name = gameStart(windowSurface, windowWidth, windowHeight, scale)
     
     allNotes = noteSeperator("map")
     (map_rect, x_dict) = loadmap("map", windowWidth, keys, multiplier)
@@ -128,6 +138,7 @@ def playGame():
 
     while True:
         windowSurface.fill(WHITE)
+
         backButton: Rect = pygame.Rect(8*windowWidth/9-15, 15, windowWidth/9, windowHeight/9)
         if(timer == musicDelayFrames):
             mixer.music.play()
@@ -164,7 +175,7 @@ def playGame():
 
             for m_e in midi_evs:
                 event_post(m_e)
-        
+
         k = pygame.key.get_pressed()
         heldKeys = []
         for note in heldNotes:
@@ -188,7 +199,7 @@ def playGame():
                 pygame.draw.rect(windowSurface, key.colour1, key.rect)
                 key.handled = True
             pygame.draw.rect(windowSurface, BLACK, key.rect, 1)
-                    
+
 
         pygame.draw.rect(windowSurface, LIGHT_RED, backButton)
         pygame.draw.rect(windowSurface, DARK_RED, backButton, 10)
@@ -199,14 +210,14 @@ def playGame():
                  pygame.font.SysFont('calibri', round(80 * scale)), BLACK)
         drawText("Back", windowSurface, 8*windowWidth/9+15, 40,
                  pygame.font.SysFont('calibri', round(100 * scale)), BLACK)
-        
+
         mainClock.tick(fps)
         timer += 1
         if timer % 60 == 0:
             time_remaining -= 1
 
         if time_remaining <= 0:
-            gameOver(score, windowSurface, windowWidth, windowHeight, scale)
+            file_added=gameOver(3000, windowSurface, windowWidth, windowHeight, scale, file_added)
 
         pygame.display.update()
 
@@ -238,35 +249,49 @@ def loadmap(map, windowWidth, keys, m):
                         index += 1
     return rects, x_dict
 
-def gameOver(score, surface, windowWidth, windowHeight, scale):
-    f = open("resources/highScores.txt", "a+")
+def gameOver(score, surface, windowWidth, windowHeight, scale, file_added):
+    f = open("resources/highScores.txt", "a")
     from highscorescreen import findSmallestScore
     min = findSmallestScore()
     if score > int(min):
-        surface.fill(0,0,0)
+        surface.fill((0,0,0))
         drawText("Congrats! Your score was: " + str(score), surface, windowWidth/4, windowHeight/2,
-                 pygame.font.SysFont('calibri', round(120*scale), (255,0,0)))
-        name = "test" # INSERT NAME GETTER HERE
-        lines = f.readlines()
-        for line in lines:
-            if min in line:
-                parts = line.replace("\n", "").replace(" ", "").split(",")
-                parts[0] = name
-                parts[1] = score
-                outLine = ",".join(parts)
-                f.write("\n" + outLine)
+                 pygame.font.SysFont('calibri', round(80*scale), (255,0,0)))
+        if(file_added==False):
+            f.write('\n'+"MRX"+ ','+str(score))
+            file_added=True
     else:
         surface.fill((0,0,0))
         drawText("Unlucky! Your score was: " + str(score), surface, windowWidth/4, windowHeight/2,
                  pygame.font.SysFont('calibri', round(120*scale)), (255,0,0))
     f.close()
+    return file_added
+
+def gameStart(surface, windowWidth, windowHeight, scale):
+    surface.fill((0,0,0))
+    name=""
+    check=False
+    while check==False:
+        check=True
+        drawText("Please enter your name (3 letters): ", surface, windowWidth/4, windowHeight/3*2,
+                     pygame.font.SysFont('calibri', round(80*scale), (255,0,0)))
+        #textbox = TextBox(surface, windowWidth/4, windowHeight/5*4, 200, 80, fontSize=round(scale*80),
+         #             borderColour=(255,0,0), textColour=(255, 0, 0),
+          #            onSubmit=lambda name: textbox.getText() if(len(textbox.getText==3)) else(check=False),
+           #           radius=10, borderThickness=5)
+        pygame_widgets.update(pygame.event.get())
+##        f.write(textbox.getText()+','+str(score)+'\n') if(textbox.getText()==3) else (
+##                    drawText("Name must be 3 characters", surface,windowWidth/4, windowHeight/3*2.5,
+##                 pygame.font.SysFont('calibri', round(80*scale), (255,0,0)),colour=(255,255,255))
+##                  )
+    return name
 
 def removeNote(notes, noteVal):
     rtn = None
     for i in range(len(notes)):
         if notes[i][0] == noteVal:
             rtn = notes[i]
-    
+
     if rtn != None:
         notes.remove(rtn)
         return rtn
