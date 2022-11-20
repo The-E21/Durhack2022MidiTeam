@@ -91,13 +91,13 @@ def playGame():
     if settings[3] == "easy\n":
         mixer.music.load("resources/AugmentedMusicEasy.wav")
         bps = 11/9
-        musicDelayFrames = 8 * fps
+        musicDelayFrames = 10 * fps
         time_remaining = 170
     elif settings[3] == "normal\n":
         mixer.music.load("resources/AugmentedSongNormal.wav")
         bps = 11/6
         musicDelayFrames = 6 * fps
-        time_remaining = 5
+        time_remaining = 120
     else:
         mixer.music.load("resources/AugmentedSongHard.wav")
         bps = 11/4
@@ -163,10 +163,6 @@ def playGame():
         for rect in map_rect:
             pygame.draw.rect(windowSurface,(200,0,0), rect)
             rect.x -= multiplier*bps/fps
-            for key in keys:
-                if key.rect.colliderect(rect) and not key.handled:
-                    key.min += 1
-                    key.handled = True
 
         pygame.draw.rect(windowSurface, WHITE, pygame.Rect(0,0,5,windowHeight))
 
