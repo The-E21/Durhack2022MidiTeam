@@ -102,7 +102,7 @@ def playGame():
         mixer.music.load("resources/AugmentedSongHard.wav")
         bps = 11/4
         time_remaining = 80
-    
+
     musicDelayFrames = fps*(windowWidth -  105)//int(multiplier*bps)
     forgiveFrames = 7
     musicVolume = (int(settings[0]) * int(settings[1])) / 10000
@@ -128,7 +128,7 @@ def playGame():
 
     score = 0
     #name = gameStart(windowSurface, windowWidth, windowHeight, scale)
-    
+
     allNotes = noteSeperator("map")
     (map_rect, x_dict) = loadmap("map", windowWidth, keys, multiplier)
 
@@ -167,7 +167,6 @@ def playGame():
                     if not rNote == -1:
                         score += 10
                         allNotes[event.data1 % 48].remove(rNote)
-        
         if keyboardConnected and midiInp.poll():
             midi_events = midiInp.read(10)
             # convert them into pygame events.
@@ -303,7 +302,7 @@ def checkRequireNote(note,frame,forgiveframes,fps,bps,allNotes,musicDelayFrames)
         checkFrame = float(inote[0]) * fps/bps + musicDelayFrames
         if(frame >= checkFrame - forgiveframes) and (frame <= checkFrame + forgiveframes):
             return inote
-    
+
     return -1
 
 playGame()
